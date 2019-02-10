@@ -2,6 +2,7 @@ import gzip
 import json
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 from pandas.io.json import json_normalize
 
@@ -29,33 +30,48 @@ car.timestamp = 1000*car.timestamp
 
 
 # Calculate durations of each trip
-df_car_trip = car.groupby('trip_id').agg({'timestamp': 'min'})
-df_car_trip['length'] = car[['trip_id', 'timestamp']].groupby('trip_id').agg(lambda x:x.max()-x.min())
-print(df_car_trip)
-
-
-cell['trip_no'] = 0
-
-for i in range(1, len(cell)):
-        if cell.iloc[i, 2] == 0:
-            cell.iloc[i, 5] = cell.iloc[i-1, 5] + 1
+# car
+def trip_duration(data, a, b):
+    data['trip_no'] = 0
+    for i in range(1, len(data)):
+        if data.iloc[i, a] == 0:
+            data.iloc[i, b] = data.iloc[i-1, b] + 1
         else:
-            cell.iloc[i, 5] = cell.iloc[i-1, 5]
+            data.iloc[i, b] = data.iloc[i-1, b]
+    return data
+
+def group_trip(data):
+    group_data = data.groupby('trip_no').agg({'trip_id': 'min', 'timestamp': 'min','speed': 'min'})
+    group_data['length'] = data[['trip_no', 'timestamp']].groupby('trip_no').agg(lambda x: x.max() - x.min())
+    group_data = group_data.query('length >5 ')
+
+    return group_data
+
+car = trip_duration(car, 0, 3)
+cell = trip_duration(cell, 2, 5)
+
+group_car = group_trip(car)
+group_cell = group_trip(cell)
 
 
-
-df_cell_trip = cell.groupby('trip_no').agg({'trip_id': 'min', 'timestamp': 'min'})
-df_cell_trip['length'] = cell[['trip_no', 'timestamp']].groupby('trip_no').agg(lambda x:x.max()-x.min())
-df_cell_trip = df_cell_trip.query('length != 0')
-
-print(df_cell_trip.describe())
-
-## search for the closed length to merge
-df_match = pd.merge_asof(df_cell_trip.reset_index().sort_values(by='length'),
-                           df_car_trip.reset_index().sort_values(by='length'),
+# search for the closed length to merge
+df_match = pd.merge_asof(group_car.reset_index().sort_values(by='length'),
+                           group_cell.reset_index().sort_values(by='length'),
                            suffixes=['_cell', '_car'],
                            on='length',
                            direction='nearest')
 
-print(df_match.describe())
+df_match['trip_index'] = range(1,len(df_match)+1)
+
+# Select matched trips speed data for later plotting
+
+car_speed = pd.DataFrame()
+for i in range(len(df_match)):
+    car_speed = car_speed.append(car[(car['trip_no'] == df_match.loc[i, 'trip_no_car'])])
+
+
+cell_speed = pd.DataFrame()
+for i in range(len(df_match)):
+    cell_speed = cell_speed.append(cell[(cell['trip_no'] == df_match.loc[i, 'trip_no_cell'])])
+
 
