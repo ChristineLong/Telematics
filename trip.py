@@ -43,3 +43,19 @@ for i in range(1, len(cell)):
             cell.iloc[i, 5] = cell.iloc[i-1, 5]
 
 
+
+df_cell_trip = cell.groupby('trip_no').agg({'trip_id': 'min', 'timestamp': 'min'})
+df_cell_trip['length'] = cell[['trip_no', 'timestamp']].groupby('trip_no').agg(lambda x:x.max()-x.min())
+df_cell_trip = df_cell_trip.query('length != 0')
+
+print(df_cell_trip.describe())
+
+## search for the closed length to merge
+df_match = pd.merge_asof(df_cell_trip.reset_index().sort_values(by='length'),
+                           df_car_trip.reset_index().sort_values(by='length'),
+                           suffixes=['_cell', '_car'],
+                           on='length',
+                           direction='nearest')
+
+print(df_match.describe())
+
