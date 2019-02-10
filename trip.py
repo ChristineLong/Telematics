@@ -27,3 +27,10 @@ car = append_data(car_trip)
 # Change the accuracy of timestamp in car data to be seconds
 car.timestamp = 1000*car.timestamp
 
+
+# Calculate durations of each trip
+df_car_trip = car.groupby('trip_id').agg({'timestamp': 'min'})
+df_car_trip['length'] = car[['trip_id', 'timestamp']].groupby('trip_id').agg(lambda x:x.max()-x.min())
+
+print(df_car_trip)
+
