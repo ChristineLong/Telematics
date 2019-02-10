@@ -31,6 +31,15 @@ car.timestamp = 1000*car.timestamp
 # Calculate durations of each trip
 df_car_trip = car.groupby('trip_id').agg({'timestamp': 'min'})
 df_car_trip['length'] = car[['trip_id', 'timestamp']].groupby('trip_id').agg(lambda x:x.max()-x.min())
-
 print(df_car_trip)
+
+
+cell['trip_no'] = 0
+
+for i in range(1, len(cell)):
+        if cell.iloc[i, 2] == 0:
+            cell.iloc[i, 5] = cell.iloc[i-1, 5] + 1
+        else:
+            cell.iloc[i, 5] = cell.iloc[i-1, 5]
+
 
