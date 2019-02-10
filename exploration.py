@@ -23,3 +23,22 @@ def append_data(rawdata):
 
 cell = append_data(cell_trip)
 car = append_data(car_trip)
+
+# Explore data
+print(cell.shape)
+print(car.shape)
+
+print(car.describe())
+print(cell.describe())
+# All speed is no less than 0. No need for filtering.
+# Timestamp in car is not epoch. Cannot used for matching.
+# Also, by comparison to cell, the accuracy for it should be 1000 seconds.
+
+
+print(len(np.unique(cell['trip_id'])))
+print(len(np.unique(car['trip_id'])))
+# Trip ids are different in two dataframes. Cannot be used for match.
+
+
+
+
