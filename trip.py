@@ -99,7 +99,7 @@ with PdfPages('matched_trip.pdf') as pdf:
                 cell.query('trip_no == @trip_index_cell')['timestamp'],
                 cell.query('trip_no == @trip_index_cell')['speed'])
             plt.ylabel('Speed')
-            plt.ylabel('Timestamp: (epoch) seconds')
+            plt.xlabel('Timestamp: (epoch) seconds')
             filename = 'matched_trip_' + str(i)
             plt.title(filename)
             pdf.savefig()  # saves the current figure into a pdf page
