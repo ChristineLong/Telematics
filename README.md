@@ -1,5 +1,5 @@
 # Telematics
-Sample project for interview
+Sample project for interview. Following files are included in this repositories.
 
 ## exploration.py
 This file focus on the data exploration and formation of ideas.
@@ -13,7 +13,7 @@ Raw data:
 - The source data type is limited to .gz file to avoid unintended mistakes of choosing wrong type of data
 
 Result:
-Please note that the observation / row number in the final dataset (matched_trip.csv) is more than the number of matched trips (plots in match_trip.pdf). This is because some of the trips are not one-on-one match.
+- Please note that the observation / row number in the final dataset (matched_trip.csv) is more than the number of matched trips (plots in match_trip.pdf). This is because some of the trips are not one-on-one match.
 
 ## match_trip.pdf
 This file includes all the plots for matched trips
