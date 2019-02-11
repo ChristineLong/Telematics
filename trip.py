@@ -82,7 +82,7 @@ df_match = pd.merge_asof(group_car.reset_index().sort_values(by='length'),
                            direction='nearest')
 
 # Filter trip which doesn't have a 0 start speed (Mainly the first one due to trip_no). Drop speed due to redundancy.
-df_match = df_match.query('speed_cell ==0 ' and 'speed_car == 0')
+df_match = df_match.query('speed_cell ==0  & speed_car == 0')
 df_match = df_match.drop(['speed_cell', 'speed_car'], axis=1)
 
 # Save the matched trip data to csv
