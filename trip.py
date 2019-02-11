@@ -16,17 +16,17 @@ application_window = tk.Tk()
 my_filetypes = [('GZ File', '.gz')]
 answer_car = filedialog.askopenfilename(parent=application_window,
                                     initialdir=os.getcwd(),
-                                    title="Please select a file for car data:",
+                                    title="Please select a file for car/obd2 data:",
                                     filetypes=my_filetypes)
 answer_cell = filedialog.askopenfilename(parent=application_window,
                                     initialdir=os.getcwd(),
-                                    title="Please select a file for mobile data:",
+                                    title="Please select a file for cell/mobile data:",
                                     filetypes=my_filetypes)
 # Read data from a gzip compressed json to lists
-with gzip.open("obd2_trips.json.gz", "rt", encoding="utf-8") as f:
+with gzip.open(answer_car, "rt", encoding="utf-8") as f:
     car_trip = json.load(f)
 
-with gzip.open("mobile_trips.json.gz", "rt", encoding="utf-8") as f:
+with gzip.open(answer_cell, "rt", encoding="utf-8") as f:
     cell_trip = json.load(f)
 
 # Transform the data from nested lists to pandas dataframes. Since timestamp data, no need to sort time variable.
