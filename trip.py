@@ -5,7 +5,21 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from pandas.io.json import json_normalize
 
+import tkinter as tk
+from tkinter import filedialog
+import os
 
+# Let user decide which file to be uploaded
+application_window = tk.Tk()
+my_filetypes = [('GZ File', '.gz')]
+answer_car = filedialog.askopenfilename(parent=application_window,
+                                    initialdir=os.getcwd(),
+                                    title="Please select a file for car data:",
+                                    filetypes=my_filetypes)
+answer_cell = filedialog.askopenfilename(parent=application_window,
+                                    initialdir=os.getcwd(),
+                                    title="Please select a file for mobile data:",
+                                    filetypes=my_filetypes)
 # Read data from a gzip compressed json to lists
 with gzip.open("obd2_trips.json.gz", "rt", encoding="utf-8") as f:
     car_trip = json.load(f)
@@ -44,7 +58,7 @@ def trip_duration(data, a, b):
 
 # Group data by different trips
 def group_trip(data):
-    group_data = data.groupby('trip_no').agg({'trip_id': 'min', 'timestamp': 'min','speed': 'min'})
+    group_data = data.groupby('trip_no').agg({'trip_id': 'min', 'timestamp': 'min'})
     group_data['length'] = data[['trip_no', 'timestamp']].groupby('trip_no').agg(lambda x: x.max() - x.min())
     group_data = group_data.query('length >5 ')
 
@@ -64,6 +78,8 @@ df_match = pd.merge_asof(group_car.reset_index().sort_values(by='length'),
                            on='length',
                            direction='nearest')
 
+# Save the matched trip data to csv
+df_match.to_csv('matched_trip.csv')
 
 # Select matched trips speed data for later plotting
 with PdfPages('match_trip.pdf') as pdf:
