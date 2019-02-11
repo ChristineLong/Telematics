@@ -24,12 +24,15 @@ def append_data(rawdata):
 
 cell = append_data(cell_trip)
 car = append_data(car_trip)
+
 # Change the accuracy of timestamp in car data to be seconds
 car.timestamp = 1000*car.timestamp
 
 
 # Calculate durations of each trip
-# car
+
+# Define a function to separate different trips. Assume the starting point and ending point are 0 speed
+# (No one can jump on or off a driving car)
 def trip_duration(data, a, b):
     data['trip_no'] = 0
     for i in range(1, len(data)):
@@ -39,6 +42,7 @@ def trip_duration(data, a, b):
             data.iloc[i, b] = data.iloc[i-1, b]
     return data
 
+# Group data by different trips
 def group_trip(data):
     group_data = data.groupby('trip_no').agg({'trip_id': 'min', 'timestamp': 'min','speed': 'min'})
     group_data['length'] = data[['trip_no', 'timestamp']].groupby('trip_no').agg(lambda x: x.max() - x.min())
