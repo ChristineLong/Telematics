@@ -75,3 +75,23 @@ for i in range(len(df_match)):
     cell_speed = cell_speed.append(cell[(cell['trip_no'] == df_match.loc[i, 'trip_no_cell'])])
 
 
+
+
+
+for i in range(len(df_match)):
+    trip_index_cell = df_match.loc[i,'trip_no_cell']
+    trip_index_car = df_match.loc[i,'trip_no_car']
+
+
+    if max(cell.query('trip_no == @trip_index_cell')['speed']) > 0  \
+        and max(car.query('trip_no == @trip_index_car')['speed']) > 0 \
+            and min(cell.query('trip_no == @trip_index_cell')['speed']) == min(car.query('trip_no == @trip_index_car')['speed']):
+        plt.plot(
+            cell.query('trip_no == @trip_index_cell')['timestamp'],
+            cell.query('trip_no == @trip_index_cell')['speed'])
+        plt.plot(
+            cell.query('trip_no == @trip_index_cell')['timestamp'],
+            car.query('trip_no == @trip_index_car')['speed'])
+
+    filename = 'matched_trip_' + str(i) + '.png'
+    plt.savefig(filename)  # save the figure to file
