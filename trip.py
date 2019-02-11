@@ -1,9 +1,8 @@
 import gzip
 import json
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-
+from matplotlib.backends.backend_pdf import PdfPages
 from pandas.io.json import json_normalize
 
 
@@ -61,37 +60,18 @@ df_match = pd.merge_asof(group_car.reset_index().sort_values(by='length'),
                            on='length',
                            direction='nearest')
 
-df_match['trip_index'] = range(1,len(df_match)+1)
 
 # Select matched trips speed data for later plotting
+with PdfPages('match_trip.pdf') as pdf:
+    for i in range(len(df_match)):
+        trip_index_cell = df_match.loc[i, 'trip_no_cell']
+        trip_index_car = df_match.loc[i, 'trip_no_car']
 
-car_speed = pd.DataFrame()
-for i in range(len(df_match)):
-    car_speed = car_speed.append(car[(car['trip_no'] == df_match.loc[i, 'trip_no_car'])])
-
-
-cell_speed = pd.DataFrame()
-for i in range(len(df_match)):
-    cell_speed = cell_speed.append(cell[(cell['trip_no'] == df_match.loc[i, 'trip_no_cell'])])
-
-
-
-
-
-for i in range(len(df_match)):
-    trip_index_cell = df_match.loc[i,'trip_no_cell']
-    trip_index_car = df_match.loc[i,'trip_no_car']
-
-
-    if max(cell.query('trip_no == @trip_index_cell')['speed']) > 0  \
-        and max(car.query('trip_no == @trip_index_car')['speed']) > 0 \
-            and min(cell.query('trip_no == @trip_index_cell')['speed']) == min(car.query('trip_no == @trip_index_car')['speed']):
-        plt.plot(
-            cell.query('trip_no == @trip_index_cell')['timestamp'],
-            cell.query('trip_no == @trip_index_cell')['speed'])
-        plt.plot(
-            cell.query('trip_no == @trip_index_cell')['timestamp'],
-            car.query('trip_no == @trip_index_car')['speed'])
-
-    filename = 'matched_trip_' + str(i) + '.png'
-    plt.savefig(filename)  # save the figure to file
+        if max(cell.query('trip_no == @trip_index_cell')['speed']) > 0:
+            plt.plot(
+                cell.query('trip_no == @trip_index_cell')['timestamp'],
+                cell.query('trip_no == @trip_index_cell')['speed'])
+            filename = 'matched_trip_' + str(i)
+            plt.title(filename)
+            pdf.savefig()  # saves the current figure into a pdf page
+            plt.close()
