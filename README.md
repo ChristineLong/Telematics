@@ -32,9 +32,9 @@ The method of matching trips is by the length of trip. Due to different trips st
 Results:
 
 There are 48 matched trips. Most trips have relatively stable change of speed, indicating that the driver’s driving behavior is relatively not risky. Meanwhile five of them (matched_trip_no: 18, 47, 52, 149, 312) have more than three times of abrupt speed changes. Using the information of the timestamp, the time of these five trips are as follows (assuming the trips is in EST):
-Sunday, June 4, 2017 11:08:39 AM
-Sunday, May 21, 2017 1:49:41 PM
-Sunday, May 14, 2017 3:06:42 PM
-Sunday, June 4, 2017 12:30:34 PM
-Tuesday, May 30, 2017 10:54:07 PM
+- Sunday, June 4, 2017 11:08:39 AM
+- Sunday, May 21, 2017 1:49:41 PM
+- Sunday, May 14, 2017 3:06:42 PM
+- Sunday, June 4, 2017 12:30:34 PM
+- Tuesday, May 30, 2017 10:54:07 PM
 As we can see, 4 out of five trips were around Sunday noon. Given that the timestamp didn’t focus on Sunday(date=(timestamp/86400)+25569), and assuming the owner was the driver the whole time, this could be the consequence of a more complicated traffic condition during Sunday noon, or certain habits/activities patterns in the driver’s life during Sunday noon.
