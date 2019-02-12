@@ -90,7 +90,7 @@ df_match.to_csv('matched_trip.csv')
 
 # Select matched trips speed data for later plotting
 with PdfPages('matched_trip.pdf') as pdf:
-    for i in range(len(df_match)):
+    for i in range(1, len(df_match)):
         trip_index_cell = df_match.loc[i, 'trip_no_cell']
         trip_index_car = df_match.loc[i, 'trip_no_car']
 
@@ -99,7 +99,7 @@ with PdfPages('matched_trip.pdf') as pdf:
                 cell.query('trip_no == @trip_index_cell')['timestamp'],
                 cell.query('trip_no == @trip_index_cell')['speed'])
             plt.ylabel('Speed')
-            plt.xlabel('Timestamp: (epoch) seconds')
+            plt.xlabel('Timestamp')
             filename = 'matched_trip_' + str(i)
             plt.title(filename)
             pdf.savefig()  # saves the current figure into a pdf page
