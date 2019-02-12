@@ -38,4 +38,4 @@ There are 48 matched trips. Most trips have relatively stable change of speed, i
 - Sunday, June 4, 2017 12:30:34 PM
 - Tuesday, May 30, 2017 10:54:07 PM
 
-As we can see, 4 out of five trips were around Sunday noon. Given that the timestamp didn’t focus on Sunday(date=(timestamp/86400)+25569), and assuming the owner was the driver the whole time, this could be the consequence of a more complicated traffic condition during Sunday noon, or certain habits/activities patterns in the driver’s life during Sunday noon.
+As we can see, 4 out of 5 trips were around Sunday noon. Given that the timestamp didn’t focus on Sunday (the matched trips covered from Monday to Sunday without huge differences in proportion), and assuming the owner was the driver the whole time, this could be the consequence of a more complicated traffic condition during Sunday noon, or certain habits/activities patterns in the driver’s life during Sunday noon.
